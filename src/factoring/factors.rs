@@ -3,13 +3,13 @@ use std::vec::Vec;
 pub fn factors(number: u64) -> Vec<u64> {
     let mut to_ret = Vec::new();
 
-    // Ranges in rust do not use the right side index
-    // i.e. 1..1 does nothing
-    for factor in 1..number + 1 {
+    for factor in 1..number {
         if number % factor == 0 {
             to_ret.push(factor);
         }
     }
+
+    to_ret.push(number);
 
     to_ret
 }
@@ -37,8 +37,8 @@ mod tests {
 
             // Some numbers have a specific number of factors
             match num {
-                1 | 2 => assert_eq!(factors.len() as u64, num),
-                3 | 5 | 7 | 11 | 13 | 17 => assert_eq!(factors.len(), 2), // primes have two factors
+                1 | 2 => assert_eq!(factors.len() as u64, num), // 1 has 1 factor (1) and 2 has 2 factors (1, 2)
+                3 | 5 | 7 | 11 | 13 | 17 | 19 | 23 | 29 => assert_eq!(factors.len(), 2), // primes have two factors
                 _ => {}
             }
         }
