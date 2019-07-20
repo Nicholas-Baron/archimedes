@@ -1,5 +1,5 @@
 use archimedes::factoring::prime_factors::prime_factors;
-use archimedes::is_prime::is_prime;
+use archimedes::is_prime;
 
 #[test]
 fn all_prime_factors_are_prime() {
