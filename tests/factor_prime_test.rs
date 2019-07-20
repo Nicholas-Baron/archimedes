@@ -1,4 +1,4 @@
-use archimedes::factoring::prime_factors::prime_factors;
+use archimedes::factoring::prime_factors;
 use archimedes::is_prime;
 
 #[test]
