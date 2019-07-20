@@ -38,6 +38,15 @@ pub fn prime_factors(number: u64) -> Vec<u64> {
 
     to_ret
 }
+
+pub fn is_perfect(number: &u64) -> bool {
+    factors(*number)
+        .iter()
+        .filter(|&i| i != number)
+        .fold(0, |sum, &val| sum + val)
+        == *number
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -93,6 +102,22 @@ mod tests {
                     assert_eq!(prime_factors[0], num);
                 }
                 _ => {}
+            }
+        }
+    }
+
+    #[test]
+    fn is_perfect_test() {
+        for num in 1..100 {
+            let perfect = is_perfect(&num);
+
+            match num {
+                6 | 28 => {
+                    assert!(perfect);
+                }
+                _ => {
+                    assert!(!perfect);
+                }
             }
         }
     }
