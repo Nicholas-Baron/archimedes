@@ -42,6 +42,20 @@ mod tests {
             } else {
                 assert_eq!(prime_factors.len(), 0);
             }
+
+            // All even numbers should have their first prime factor as 2
+            if num % 2 == 0 {
+                assert_eq!(prime_factors[0], 2);
+            }
+
+            // If a number is prime, it should be its own only factor
+            match num {
+                3 | 5 | 7 | 11 | 13 | 17 | 23 | 29 => {
+                    assert_eq!(prime_factors.len(), 1);
+                    assert_eq!(prime_factors[0], num);
+                }
+                _ => {}
+            }
         }
     }
 }
