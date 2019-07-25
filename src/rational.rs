@@ -102,6 +102,18 @@ impl ops::Sub<Rational> for Rational {
     }
 }
 
+#[allow(clippy::suspicious_op_assign_impl)]
+#[allow(clippy::suspicious_arithmetic_impl)]
+
+impl ops::SubAssign<Rational> for Rational {
+    fn sub_assign(&mut self, rhs: Rational) {
+        *self = Rational {
+            top: (self.top * rhs.bottom) - (self.bottom * rhs.top),
+            bottom: self.bottom * rhs.bottom,
+        };
+    }
+}
+
 impl ops::Neg for Rational {
     type Output = Rational;
     fn neg(self) -> Rational {
@@ -129,6 +141,15 @@ impl ops::Mul<Rational> for Rational {
     }
 }
 
+impl ops::MulAssign<Rational> for Rational {
+    fn mul_assign(&mut self, rhs: Rational) {
+        *self = Rational {
+            top: self.top * rhs.top,
+            bottom: self.bottom * rhs.bottom,
+        }
+    }
+}
+
 #[allow(clippy::suspicious_op_assign_impl)]
 #[allow(clippy::suspicious_arithmetic_impl)]
 
@@ -138,6 +159,19 @@ impl ops::Div<Rational> for Rational {
         Rational {
             top: self.top * rhs.bottom,
             bottom: self.bottom * rhs.top,
+        }
+    }
+}
+
+#[allow(clippy::suspicious_op_assign_impl)]
+#[allow(clippy::suspicious_arithmetic_impl)]
+
+impl ops::Div<i64> for Rational {
+    type Output = Rational;
+    fn div(self, rhs: i64) -> Rational {
+        Rational {
+            bottom: self.bottom * rhs,
+            ..self
         }
     }
 }
@@ -152,13 +186,13 @@ impl cmp::Eq for Rational {}
 
 impl cmp::PartialOrd for Rational {
     fn partial_cmp(&self, rhs: &Rational) -> Option<Ordering> {
-        let lhs_use = if self.denominator() < 0 {
+        let lhs_use = if self.top < 0 {
             self.flip_signs().simplified()
         } else {
             self.simplified()
         };
 
-        let rhs_use = if rhs.denominator() < 0 {
+        let rhs_use = if rhs.top < 0 {
             rhs.flip_signs().simplified()
         } else {
             rhs.simplified()
@@ -167,8 +201,7 @@ impl cmp::PartialOrd for Rational {
         if rhs_use == lhs_use {
             Some(Ordering::Equal)
         } else {
-            (lhs_use.numerator() * rhs_use.denominator())
-                .partial_cmp(&(lhs_use.denominator() * rhs_use.numerator()))
+            (lhs_use.top * rhs_use.bottom).partial_cmp(&(lhs_use.bottom * rhs_use.top))
         }
     }
 }
@@ -189,7 +222,7 @@ mod tests {
         assert!(Rational::new(1, 2) + Rational::new(1, 2) == Rational::from(1));
         assert!(Rational::new(1, 2) - Rational::new(1, 2) == Rational::from(0));
         assert!(Rational::new(1, 2) * Rational::new(1, 2) == Rational::new(1, 4));
-        assert!(Rational::new(1, 2) / Rational::from(2) == Rational::new(1, 4));
+        assert!(Rational::new(1, 2) / 2 == Rational::new(1, 4));
 
         // Comparisons
         assert!(Rational::new(1, 3) < Rational::new(1, 2));
