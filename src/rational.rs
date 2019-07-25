@@ -176,6 +176,30 @@ impl ops::Div<i64> for Rational {
     }
 }
 
+#[allow(clippy::suspicious_op_assign_impl)]
+#[allow(clippy::suspicious_arithmetic_impl)]
+
+impl ops::DivAssign<Rational> for Rational {
+    fn div_assign(&mut self, rhs: Rational) {
+        *self = Rational {
+            top: self.top * rhs.bottom,
+            bottom: self.bottom * rhs.top,
+        };
+    }
+}
+
+#[allow(clippy::suspicious_op_assign_impl)]
+#[allow(clippy::suspicious_arithmetic_impl)]
+
+impl ops::DivAssign<i64> for Rational {
+    fn div_assign(&mut self, rhs: i64) {
+        *self = Rational {
+            bottom: self.bottom * rhs,
+            ..*self
+        };
+    }
+}
+
 impl cmp::PartialEq for Rational {
     fn eq(&self, rhs: &Rational) -> bool {
         self.top * rhs.bottom == self.bottom * rhs.top
