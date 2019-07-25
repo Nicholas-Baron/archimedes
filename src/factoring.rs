@@ -39,12 +39,12 @@ pub fn prime_factors(number: u64) -> Vec<u64> {
     to_ret
 }
 
-pub fn is_perfect(number: &u64) -> bool {
-    factors(*number)
+pub fn is_perfect(number: u64) -> bool {
+    factors(number)
         .iter()
-        .filter(|&i| i != number)
-        .fold(0, |sum, &val| sum + val)
-        == *number
+        .filter(|&&i| i != number)
+        .sum::<u64>()
+        == number
 }
 
 #[cfg(test)]

@@ -62,6 +62,11 @@ impl From<i64> for Rational {
     }
 }
 
+// Clippy warns about the impls but they are mathematically correct
+// Needs to be before each impl
+#[allow(clippy::suspicious_op_assign_impl)]
+#[allow(clippy::suspicious_arithmetic_impl)]
+
 impl ops::Add<Rational> for Rational {
     type Output = Rational;
     fn add(self, rhs: Rational) -> Rational {
@@ -72,6 +77,9 @@ impl ops::Add<Rational> for Rational {
     }
 }
 
+#[allow(clippy::suspicious_op_assign_impl)]
+#[allow(clippy::suspicious_arithmetic_impl)]
+
 impl ops::AddAssign for Rational {
     fn add_assign(&mut self, rhs: Rational) {
         *self = Rational {
@@ -80,6 +88,9 @@ impl ops::AddAssign for Rational {
         };
     }
 }
+
+#[allow(clippy::suspicious_op_assign_impl)]
+#[allow(clippy::suspicious_arithmetic_impl)]
 
 impl ops::Sub<Rational> for Rational {
     type Output = Rational;
@@ -117,6 +128,9 @@ impl ops::Mul<Rational> for Rational {
         }
     }
 }
+
+#[allow(clippy::suspicious_op_assign_impl)]
+#[allow(clippy::suspicious_arithmetic_impl)]
 
 impl ops::Div<Rational> for Rational {
     type Output = Rational;
