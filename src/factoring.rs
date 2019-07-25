@@ -109,7 +109,7 @@ mod tests {
     #[test]
     fn is_perfect_test() {
         for num in 1..100 {
-            let perfect = is_perfect(&num);
+            let perfect = is_perfect(num);
 
             match num {
                 6 | 28 => {
