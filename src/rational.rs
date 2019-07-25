@@ -1,4 +1,4 @@
-use std::cmp;
+use std::cmp::{self, Ordering};
 use std::ops;
 
 use super::gcd;
@@ -15,10 +15,6 @@ impl Rational {
         Rational { top, bottom }
     }
 
-    pub fn new() -> Rational {
-        Rational{top: 0, bottom: 1}
-    }
-
     pub fn simplified(&self) -> Rational {
         match gcd(self.top.abs() as u64, self.bottom.abs() as u64) {
             0 | 1 => Rational { ..*self },
@@ -32,8 +28,31 @@ impl Rational {
     pub fn numerator(&self) -> i64 {
         self.top
     }
+
     pub fn denominator(&self) -> i64 {
         self.bottom
+    }
+
+    pub fn flip_signs(&self) -> Rational {
+        let bottom = if self.numerator() < 0 {
+            -self.denominator()
+        } else {
+            self.denominator()
+        };
+
+        let top = if self.denominator() < 0 {
+            -self.numerator()
+        } else {
+            self.numerator()
+        };
+
+        Rational { top, bottom }
+    }
+}
+
+impl Default for Rational {
+    fn default() -> Rational {
+        Rational { top: 0, bottom: 1 }
     }
 }
 
@@ -117,15 +136,43 @@ impl cmp::PartialEq for Rational {
 
 impl cmp::Eq for Rational {}
 
+impl cmp::PartialOrd for Rational {
+    fn partial_cmp(&self, rhs: &Rational) -> Option<Ordering> {
+        let lhs_use = if self.denominator() < 0 {
+            self.flip_signs().simplified()
+        } else {
+            self.simplified()
+        };
+
+        let rhs_use = if rhs.denominator() < 0 {
+            rhs.flip_signs().simplified()
+        } else {
+            rhs.simplified()
+        };
+
+        if rhs_use == lhs_use {
+            Some(Ordering::Equal)
+        } else {
+            (lhs_use.numerator() * rhs_use.denominator())
+                .partial_cmp(&(lhs_use.denominator() * rhs_use.numerator()))
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn rational_test() {
+        // Math ops
         assert!(Rational::new(1, 2) + Rational::new(1, 2) == Rational::from(1));
         assert!(Rational::new(1, 2) - Rational::new(1, 2) == Rational::from(0));
         assert!(Rational::new(1, 2) * Rational::new(1, 2) == Rational::new(1, 4));
         assert!(Rational::new(1, 2) / Rational::from(2) == Rational::new(1, 4));
+
+        // Comparisons
+        assert!(Rational::new(1, 3) < Rational::new(1, 2));
+        assert!(Rational::from(1) > Rational::new(1, 2));
     }
 }
