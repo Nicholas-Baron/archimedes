@@ -1,6 +1,8 @@
 use std::cmp;
 use std::ops;
 
+use super::gcd;
+
 #[derive(Debug)]
 pub struct Rational {
     top: i64,
@@ -11,6 +13,23 @@ impl Rational {
     pub fn new(top: i64, bottom: i64) -> Rational {
         assert_ne!(bottom, 0);
         Rational { top, bottom }
+    }
+
+    pub fn simplified(&self) -> Rational {
+        match gcd(self.top.abs() as u64, self.bottom.abs() as u64) {
+            0 | 1 => Rational { ..*self },
+            n => Rational {
+                top: self.top / n as i64,
+                bottom: self.bottom / n as i64,
+            },
+        }
+    }
+
+    pub fn numerator(&self) -> i64 {
+        self.top
+    }
+    pub fn denominator(&self) -> i64 {
+        self.bottom
     }
 }
 
@@ -27,6 +46,15 @@ impl ops::Add<Rational> for Rational {
             top: (self.top * rhs.bottom) + (self.bottom * rhs.top),
             bottom: self.bottom * rhs.bottom,
         }
+    }
+}
+
+impl ops::AddAssign for Rational {
+    fn add_assign(&mut self, rhs: Rational) {
+        *self = Rational {
+            top: (self.top * rhs.bottom) + (self.bottom * rhs.top),
+            bottom: self.bottom * rhs.bottom,
+        };
     }
 }
 
@@ -82,6 +110,8 @@ impl cmp::PartialEq for Rational {
         self.top * rhs.bottom == self.bottom * rhs.top
     }
 }
+
+impl cmp::Eq for Rational {}
 
 #[cfg(test)]
 mod tests {
