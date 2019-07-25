@@ -1,4 +1,5 @@
 pub mod factoring;
+pub mod rational;
 
 pub fn is_prime(number: u64) -> bool {
     if number <= 14 {
