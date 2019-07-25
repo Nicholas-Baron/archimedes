@@ -24,6 +24,15 @@ pub fn is_prime(number: u64) -> bool {
     }
 }
 
+pub fn gcd(a: u64, b: u64) -> u64 {
+    assert!(a > b);
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -38,5 +47,10 @@ mod tests {
                 assert!(!prime);
             }
         }
+    }
+
+    #[test]
+    fn gcd_test() {
+        assert_eq!(gcd(54, 24), 6);
     }
 }
