@@ -26,7 +26,6 @@ pub fn is_prime(number: u64) -> bool {
 }
 
 pub fn gcd(a: u64, b: u64) -> u64 {
-    assert!(a > b);
     if b == 0 {
         a
     } else {
