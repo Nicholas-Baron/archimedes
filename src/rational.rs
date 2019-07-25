@@ -159,6 +159,12 @@ impl cmp::PartialOrd for Rational {
     }
 }
 
+impl cmp::Ord for Rational {
+    fn cmp(&self, rhs: &Self) -> Ordering {
+        self.partial_cmp(rhs).unwrap()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
