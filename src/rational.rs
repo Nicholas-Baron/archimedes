@@ -15,6 +15,10 @@ impl Rational {
         Rational { top, bottom }
     }
 
+    pub fn new() -> Rational {
+        Rational{top: 0, bottom: 1}
+    }
+
     pub fn simplified(&self) -> Rational {
         match gcd(self.top.abs() as u64, self.bottom.abs() as u64) {
             0 | 1 => Rational { ..*self },
