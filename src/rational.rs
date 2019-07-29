@@ -260,6 +260,6 @@ mod tests {
         assert!(Rational::from(1) > Rational::new(1, 2));
 
         // Absolute value
-        assert_eq!(Rational::new(-2, -4).simplify().abs().top(), 1);
+        assert_eq!(Rational::new(-2, -4).simplify().abs().numerator(), 1);
     }
 }
