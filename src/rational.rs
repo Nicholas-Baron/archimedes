@@ -15,7 +15,7 @@ impl Rational {
         Rational { top, bottom }
     }
 
-    pub fn simplified(&self) -> Rational {
+    pub fn simplify(&self) -> Rational {
         match gcd(self.top.abs() as u64, self.bottom.abs() as u64) {
             0 | 1 => Rational { ..*self },
             n => Rational {
@@ -218,15 +218,15 @@ impl cmp::Eq for Rational {}
 impl cmp::PartialOrd for Rational {
     fn partial_cmp(&self, rhs: &Rational) -> Option<Ordering> {
         let lhs_use = if self.top < 0 {
-            self.flip_signs().simplified()
+            self.flip_signs().simplify()
         } else {
-            self.simplified()
+            self.simplify()
         };
 
         let rhs_use = if rhs.top < 0 {
-            rhs.flip_signs().simplified()
+            rhs.flip_signs().simplify()
         } else {
-            rhs.simplified()
+            rhs.simplify()
         };
 
         if rhs_use == lhs_use {
