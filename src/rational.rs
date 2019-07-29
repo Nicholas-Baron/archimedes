@@ -48,6 +48,13 @@ impl Rational {
 
         Rational { top, bottom }
     }
+
+    pub fn abs(&self) -> Rational {
+        Rational {
+            top: self.top.abs(),
+            bottom: self.bottom.abs(),
+        }
+    }
 }
 
 impl Default for Rational {
@@ -251,5 +258,8 @@ mod tests {
         // Comparisons
         assert!(Rational::new(1, 3) < Rational::new(1, 2));
         assert!(Rational::from(1) > Rational::new(1, 2));
+
+        // Absolute value
+        assert_eq!(Rational::new(-2, -4).simplify().abs().top(), 1);
     }
 }
