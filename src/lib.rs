@@ -33,7 +33,12 @@ pub fn gcd(a: u64, b: u64) -> u64 {
     }
 }
 
+pub fn quadratic_formula(a: f32, b: f32, c: f32) -> (f32, f32) {
+    let radical = (b * b - a * c * 4.0).sqrt();
+    let bottom = 2.0 * a;
 
+    ((-b + radical) / bottom, (-b - radical) / bottom)
+}
 
 #[cfg(test)]
 mod tests {
@@ -54,5 +59,10 @@ mod tests {
     #[test]
     fn gcd_test() {
         assert_eq!(gcd(54, 24), 6);
+    }
+
+    #[test]
+    fn quadratic_test(){
+        assert_eq!(quadratic_formula(2.0, -5.0, -3.0), (3.0, -0.5));
     }
 }
