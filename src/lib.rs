@@ -40,6 +40,26 @@ pub fn quadratic_formula(a: f32, b: f32, c: f32) -> (f32, f32) {
     ((-b + radical) / bottom, (-b - radical) / bottom)
 }
 
+pub fn coprimes(val: u64) -> Vec<u64> {
+    use factoring::prime_factors;
+    let input_factors = prime_factors(val);
+
+    let possibles = 2..val;
+    let guesses = possibles.map(|val| (val, prime_factors(val)));
+
+    let correct_guesses = guesses.filter(|(_, factors)| {
+        for factor in &input_factors {
+            if factors.contains(&factor) {
+                return false;
+            }
+        }
+
+        true
+    });
+
+    correct_guesses.map(|(guess, _)| guess).collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -62,7 +82,12 @@ mod tests {
     }
 
     #[test]
-    fn quadratic_test(){
+    fn quadratic_test() {
         assert_eq!(quadratic_formula(2.0, -5.0, -3.0), (3.0, -0.5));
+    }
+
+    #[test]
+    fn coprime_test() {
+        assert_eq!(coprimes(9), vec![2, 4, 5, 7, 8]);
     }
 }
