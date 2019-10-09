@@ -1,17 +1,7 @@
 use std::vec::Vec;
 
 pub fn factors(number: u64) -> Vec<u64> {
-    let mut to_ret = Vec::new();
-
-    for factor in 1..number {
-        if number % factor == 0 {
-            to_ret.push(factor);
-        }
-    }
-
-    to_ret.push(number);
-
-    to_ret
+    (1..=number).filter(|&value| number % value == 0).collect()
 }
 
 pub fn prime_factors(number: u64) -> Vec<u64> {
