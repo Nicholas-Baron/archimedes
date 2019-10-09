@@ -44,19 +44,19 @@ pub fn coprimes(val: u64) -> Vec<u64> {
     use factoring::prime_factors;
     let input_factors = prime_factors(val);
 
-    let guesses = (2..val).map(|val| (val, prime_factors(val)));
-
-    let correct_guesses = guesses.filter(|(_, factors)| {
-        for factor in &input_factors {
-            if factors.contains(&factor) {
-                return false;
+    (2..val)
+        .map(|val| (val, prime_factors(val)))
+        .filter(|(_, factors)| {
+            for factor in &input_factors {
+                if factors.contains(&factor) {
+                    return false;
+                }
             }
-        }
 
-        true
-    });
-
-    correct_guesses.map(|(guess, _)| guess).collect()
+            true
+        })
+        .map(|(guess, _)| guess)
+        .collect()
 }
 
 #[cfg(test)]
